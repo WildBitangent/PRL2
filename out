@@ -1,0 +1,441 @@
+                                AMD PHENOM x4 (2 GB per core,)
+Nums generated: 1
+Algorithm Time: 0.0783 ms
+Nums generated: 2
+Algorithm Time: 0.0828 ms
+Nums generated: 4
+Algorithm Time: 1.0791 ms
+Nums generated: 8
+Algorithm Time: 0.2769 ms
+Nums generated: 16
+Algorithm Time: 0.1947 ms
+Nums generated: 32
+Algorithm Time: 0.3486 ms
+Nums generated: 64
+Algorithm Time: 0.3324 ms
+Nums generated: 128
+Algorithm Time: 0.2639 ms
+Nums generated: 256
+Algorithm Time: 0.3127 ms
+Nums generated: 512
+Algorithm Time: 0.1694 ms
+Nums generated: 1024
+Algorithm Time: 0.1755 ms
+Nums generated: 2048
+Algorithm Time: 0.2195 ms
+Nums generated: 4096
+Algorithm Time: 0.4857 ms
+Nums generated: 8192
+Algorithm Time: 26.5667 ms
+Nums generated: 16384
+Algorithm Time: 0.6198 ms
+Nums generated: 32768
+Algorithm Time: 0.7891 ms
+Nums generated: 65536
+Algorithm Time: 1.0535 ms
+Nums generated: 131072
+Algorithm Time: 2.4033 ms
+Nums generated: 262144
+Algorithm Time: 4.5324 ms
+Nums generated: 524288
+Algorithm Time: 5.8556 ms
+Nums generated: 1048576
+Algorithm Time: 13.5984 ms
+Nums generated: 2097152
+Algorithm Time: 31.4098 ms
+Nums generated: 4194304
+Algorithm Time: 83.9552 ms
+Nums generated: 8388608
+Algorithm Time: 149.98 ms
+Nums generated: 16777216
+Algorithm Time: 245.072 ms
+Nums generated: 33554432
+Algorithm Time: 491.535 ms
+Nums generated: 67108864
+Algorithm Time: 1055.63 ms
+Nums generated: 134217728
+Algorithm Time: 2162.07 ms
+Nums generated: 268435456
+
+-- started swapping
+Algorithm Time: 5122.98 ms
+Nums generated: 536870912
+Algorithm Time: 33230.2 ms
+Nums generated: 1073741824
+
+--                                  INTEL x8 (2 GB per core)
+Nums generated: 1
+Algorithm Time: 0.9823 ms
+Nums generated: 2
+Algorithm Time: 0.6861 ms
+Nums generated: 4
+Algorithm Time: 0.6372 ms
+Nums generated: 8
+Algorithm Time: 0.5026 ms
+Nums generated: 16
+Algorithm Time: 0.532 ms
+Nums generated: 32
+Algorithm Time: 0.8945 ms
+Nums generated: 64
+Algorithm Time: 0.8867 ms
+Nums generated: 128
+Algorithm Time: 0.8012 ms
+Nums generated: 256
+Algorithm Time: 0.7163 ms
+Nums generated: 512
+Algorithm Time: 0.8742 ms
+Nums generated: 1024
+Algorithm Time: 0.9156 ms
+Nums generated: 2048
+Algorithm Time: 0.7735 ms
+Nums generated: 4096
+Algorithm Time: 0.5406 ms
+Nums generated: 8192
+Algorithm Time: 0.8584 ms
+Nums generated: 16384
+Algorithm Time: 1.004 ms
+Nums generated: 32768
+Algorithm Time: 0.9504 ms
+Nums generated: 65536
+Algorithm Time: 1.207 ms
+Nums generated: 131072
+Algorithm Time: 1.7809 ms
+Nums generated: 262144
+Algorithm Time: 2.4309 ms
+Nums generated: 524288
+Algorithm Time: 4.8356 ms
+Nums generated: 1048576
+Algorithm Time: 8.3008 ms
+Nums generated: 2097152
+Algorithm Time: 16.2755 ms
+Nums generated: 4194304
+Algorithm Time: 33.9341 ms
+Nums generated: 8388608
+Algorithm Time: 73.7502 ms
+Nums generated: 16777216
+Algorithm Time: 136.422 ms
+Nums generated: 33554432
+Algorithm Time: 297.479 ms
+Nums generated: 67108864
+Algorithm Time: 553.966 ms
+Nums generated: 134217728
+Algorithm Time: 1109.6 ms
+Nums generated: 268435456
+Algorithm Time: 2295.27 ms
+Nums generated: 536870912
+Algorithm Time: 4510.06 ms
+
+-- started swapping
+Nums generated: 1073741824
+Algorithm Time: 11778.8 ms
+
+--                                   INTEL x4 (4 GB per core)
+
+Nums generated: 1
+Algorithm Time: 0.5116 ms
+Nums generated: 2
+Algorithm Time: 0.1466 ms
+Nums generated: 4
+Algorithm Time: 0.3195 ms
+Nums generated: 8
+Algorithm Time: 0.3534 ms
+Nums generated: 16
+Algorithm Time: 0.3489 ms
+Nums generated: 32
+Algorithm Time: 0.3432 ms
+Nums generated: 64
+Algorithm Time: 0.661 ms
+Nums generated: 128
+Algorithm Time: 0.3804 ms
+Nums generated: 256
+Algorithm Time: 0.2936 ms
+Nums generated: 512
+Algorithm Time: 0.531 ms
+Nums generated: 1024
+Algorithm Time: 0.3924 ms
+Nums generated: 2048
+Algorithm Time: 0.255 ms
+Nums generated: 4096
+Algorithm Time: 0.5615 ms
+Nums generated: 8192
+Algorithm Time: 0.497 ms
+Nums generated: 16384
+Algorithm Time: 0.6222 ms
+Nums generated: 32768
+Algorithm Time: 0.7793 ms
+Nums generated: 65536
+Algorithm Time: 1.0441 ms
+Nums generated: 131072
+Algorithm Time: 1.3338 ms
+Nums generated: 262144
+Algorithm Time: 3.3249 ms
+Nums generated: 524288
+Algorithm Time: 6.2608 ms
+Nums generated: 1048576
+Algorithm Time: 9.0151 ms
+Nums generated: 2097152
+Algorithm Time: 24.4885 ms
+Nums generated: 4194304
+Algorithm Time: 47.1854 ms
+Nums generated: 8388608
+Algorithm Time: 84.8529 ms
+Nums generated: 16777216
+Algorithm Time: 173.366 ms
+Nums generated: 33554432
+Algorithm Time: 359.298 ms
+Nums generated: 67108864
+Algorithm Time: 708.215 ms
+Nums generated: 134217728
+Algorithm Time: 1462.88 ms
+Nums generated: 268435456
+Algorithm Time: 2979.42 ms
+Nums generated: 536870912
+Algorithm Time: 5627.27 ms
+Nums generated: 1073741824
+Algorithm Time: 14164.9 ms
+
+--                                  MERLIN x12 (5.3 GB per core)
+Nums generated: 1
+Algorithm Time: 0.154917 ms
+Nums generated: 2
+Algorithm Time: 0.186482 ms
+Nums generated: 4
+Algorithm Time: 0.743502 ms
+Nums generated: 8
+Algorithm Time: 0.891422 ms
+Nums generated: 16
+Algorithm Time: 1.18756 ms
+Nums generated: 32
+Algorithm Time: 1.27256 ms
+Nums generated: 64
+Algorithm Time: 0.933132 ms
+Nums generated: 128
+Algorithm Time: 1.33034 ms
+Nums generated: 256
+Algorithm Time: 0.597995 ms
+Nums generated: 512
+Algorithm Time: 1.0672 ms
+Nums generated: 1024
+Algorithm Time: 1.63072 ms
+Nums generated: 2048
+Algorithm Time: 1.27912 ms
+Nums generated: 4096
+Algorithm Time: 0.909283 ms
+Nums generated: 8192
+Algorithm Time: 1.89953 ms
+Nums generated: 16384
+Algorithm Time: 3.12456 ms
+Nums generated: 32768
+Algorithm Time: 2.037 ms
+Nums generated: 65536
+Algorithm Time: 2.29364 ms
+Nums generated: 131072
+Algorithm Time: 12.6811 ms
+Nums generated: 262144
+Algorithm Time: 5.13478 ms
+Nums generated: 524288
+Algorithm Time: 6.19237 ms
+Nums generated: 1048576
+Algorithm Time: 11.3736 ms
+Nums generated: 2097152
+Algorithm Time: 52.1737 ms
+Nums generated: 4194304
+Algorithm Time: 28.7537 ms
+Nums generated: 8388608
+Algorithm Time: 64.5632 ms
+Nums generated: 16777216
+Algorithm Time: 109.579 ms
+Nums generated: 33554432
+Algorithm Time: 263.247 ms
+Nums generated: 67108864
+Algorithm Time: 430.861 ms
+Nums generated: 134217728
+Algorithm Time: 887.235 ms
+Nums generated: 268435456
+Algorithm Time: 1688.63 ms
+Nums generated: 536870912
+Algorithm Time: 3397.68 ms
+
+--                                 Salomon x192 (5.3 GB per core)
+Nums generated: 1024
+Algorithm Time: 15106.5 ms
+Nums generated: 2048
+Algorithm Time: 15963.6 ms
+Nums generated: 4096
+Algorithm Time: 15742.7 ms
+Nums generated: 8192
+Algorithm Time: 15537.4 ms
+Nums generated: 16384
+Algorithm Time: 15315.6 ms
+Nums generated: 32768
+Algorithm Time: 15645.9 ms
+Nums generated: 65536
+Algorithm Time: 15847.7 ms
+Nums generated: 131072
+Algorithm Time: 14959.8 ms
+Nums generated: 262144
+Algorithm Time: 15083.8 ms
+Nums generated: 524288
+Algorithm Time: 15386.3 ms
+Nums generated: 1048576
+Algorithm Time: 15704.7 ms
+Nums generated: 2097152
+Algorithm Time: 15526.2 ms
+Nums generated: 4194304
+Algorithm Time: 15134.2 ms
+Nums generated: 8388608
+Algorithm Time: 15311.3 ms
+Nums generated: 16777216
+Algorithm Time: 15275.6 ms
+Nums generated: 33554432
+Algorithm Time: 15755.9 ms
+Nums generated: 67108864
+Algorithm Time: 15408.9 ms
+Nums generated: 134217728
+Algorithm Time: 15478.4 ms
+Nums generated: 268435456
+Algorithm Time: 15773.9 ms
+Nums generated: 536870912
+Algorithm Time: 15928.6 ms
+Nums generated: 1073741824
+Algorithm Time: 16675.1 ms
+Nums generated: 2147483648
+Algorithm Time: 17586.8 ms
+
+--                                 Anselm x128 (4 GB per core)
+Nums generated: 1024
+Algorithm Time: 2172.92 ms
+Nums generated: 2048
+Algorithm Time: 2300.62 ms
+Nums generated: 4096
+Algorithm Time: 2121.38 ms
+Nums generated: 8192
+Algorithm Time: 2156.71 ms
+Nums generated: 16384
+Algorithm Time: 2011.89 ms
+Nums generated: 32768
+Algorithm Time: 1959.89 ms
+Nums generated: 65536
+Algorithm Time: 1766.23 ms
+Nums generated: 131072
+Algorithm Time: 1972.33 ms
+Nums generated: 262144
+Algorithm Time: 2146.1 ms
+Nums generated: 524288
+Algorithm Time: 2572.51 ms
+Nums generated: 1048576
+Algorithm Time: 2504.73 ms
+Nums generated: 2097152
+Algorithm Time: 2463.11 ms
+Nums generated: 4194304
+Algorithm Time: 2496.93 ms
+Nums generated: 8388608
+Algorithm Time: 2752.07 ms
+Nums generated: 16777216
+Algorithm Time: 2565.83 ms
+Nums generated: 33554432
+Algorithm Time: 2688.14 ms
+Nums generated: 67108864
+Algorithm Time: 2688.43 ms
+Nums generated: 134217728
+Algorithm Time: 2841.73 ms
+Nums generated: 268435456
+Algorithm Time: 3163.98 ms
+Nums generated: 536870912
+Algorithm Time: 3854.57 ms
+Nums generated: 1073741824
+Algorithm Time: 5455.38 ms
+Nums generated: 2147483648
+Algorithm Time: 7985.38 ms
+
+--                                 Salomon x120 (5.3 GB per core)
+Nums generated: 1024
+Algorithm Time: 10316 ms
+Nums generated: 2048
+Algorithm Time: 9629.69 ms
+Nums generated: 4096
+Algorithm Time: 9812.87 ms
+Nums generated: 8192
+Algorithm Time: 9598.64 ms
+Nums generated: 16384
+Algorithm Time: 9938.29 ms
+Nums generated: 32768
+Algorithm Time: 9638.03 ms
+Nums generated: 65536
+Algorithm Time: 9626.96 ms
+Nums generated: 131072
+Algorithm Time: 9585.14 ms
+Nums generated: 262144
+Algorithm Time: 10335.6 ms
+Nums generated: 524288
+Algorithm Time: 9542.27 ms
+Nums generated: 1048576
+Algorithm Time: 10069.2 ms
+Nums generated: 2097152
+Algorithm Time: 9737.01 ms
+Nums generated: 4194304
+Algorithm Time: 9513.41 ms
+Nums generated: 8388608
+Algorithm Time: 10010.4 ms
+Nums generated: 16777216
+Algorithm Time: 9667.65 ms
+Nums generated: 33554432
+Algorithm Time: 9938.89 ms
+Nums generated: 67108864
+Algorithm Time: 9879.4 ms
+Nums generated: 134217728
+Algorithm Time: 10161 ms
+Nums generated: 268435456
+Algorithm Time: 10081.5 ms
+Nums generated: 536870912
+Algorithm Time: 10400.6 ms
+Nums generated: 1073741824
+Algorithm Time: 10995.6 ms
+Nums generated: 2147483648
+Algorithm Time: 11968.9 ms
+
+--                                 Salomon x24 (5.3 GB per core)
+Nums generated: 1024
+Algorithm Time: 2169.72 ms
+Nums generated: 2048
+Algorithm Time: 2182.06 ms
+Nums generated: 4096
+Algorithm Time: 2166.92 ms
+Nums generated: 8192
+Algorithm Time: 2034.16 ms
+Nums generated: 16384
+Algorithm Time: 2014.9 ms
+Nums generated: 32768
+Algorithm Time: 2129.75 ms
+Nums generated: 65536
+Algorithm Time: 2051.81 ms
+Nums generated: 131072
+Algorithm Time: 2064.21 ms
+Nums generated: 262144
+Algorithm Time: 2168.25 ms
+Nums generated: 524288
+Algorithm Time: 2052.27 ms
+Nums generated: 1048576
+Algorithm Time: 2242.71 ms
+Nums generated: 2097152
+Algorithm Time: 2081.86 ms
+Nums generated: 4194304
+Algorithm Time: 2156.27 ms
+Nums generated: 8388608
+Algorithm Time: 2217.07 ms
+Nums generated: 16777216
+Algorithm Time: 2260.4 ms
+Nums generated: 33554432
+Algorithm Time: 2289.11 ms
+Nums generated: 67108864
+Algorithm Time: 2297.92 ms
+Nums generated: 134217728
+Algorithm Time: 2451.19 ms
+Nums generated: 268435456
+Algorithm Time: 2709.81 ms
+Nums generated: 536870912
+Algorithm Time: 3271.67 ms
+Nums generated: 1073741824
+Algorithm Time: 4289.45 ms
+Nums generated: 2147483648
+Algorithm Time: 7244.31 ms

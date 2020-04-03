@@ -16,7 +16,40 @@
 using namespace std::chrono;
 using clk = high_resolution_clock;
 
-std::vector<float> parseInput(std::string_view input)
+int main(int argc, char *argv[])
+{
+	Process process(argc, argv);
+
+	Numbers globalNumbers;
+	if (process.isRoot())
+	{
+		#if BENCHMARK
+			globalNumbers = generateNumbers(std::strtol(argv[1], nullptr, 10));
+		#else
+			globalNumbers = parseInput(argv[1]);
+		#endif
+		process.createOffsets(globalNumbers);
+	}
+
+	visibility(process, globalNumbers);
+
+	// print numbers
+	#if !BENCHMARK
+		if (process.isRoot())
+		{
+			for (size_t i = 0; i < globalNumbers.size() - 1; ++i)
+				std::cout << static_cast<char>(globalNumbers[i]) << ",";
+			std::cout << static_cast<char>(globalNumbers.back()) << std::endl;
+		}
+	#endif
+
+	return EXIT_SUCCESS;
+}
+
+////////////////////////////////////////////////
+/// Functions
+////////////////////////////////////////////////
+Numbers parseInput(std::string_view input)
 {
 	std::vector<float> numbers;
 	size_t prev = 0;
@@ -33,7 +66,7 @@ std::vector<float> parseInput(std::string_view input)
 	return numbers;
 }
 
-std::vector<float> generateNumbers(size_t count)
+Numbers generateNumbers(size_t count)
 {
 	std::cout << "Nums generated: " << count << std::endl;
 	std::vector<float> data;
@@ -43,7 +76,7 @@ std::vector<float> generateNumbers(size_t count)
 	return data;
 }
 
-NumStruct scatterNumbers(Process& process, std::vector<float>& numbers)
+NumStruct scatterNumbers(Process& process, Numbers& numbers)
 {	
 	NumStruct result;
 	auto& sendCounts = process.getOffests().counts;
@@ -85,7 +118,7 @@ NumStruct scatterNumbers(Process& process, std::vector<float>& numbers)
 	return result;
 }
 
-void gatherNumbers(Process& process, std::vector<float>& gNums, NumStruct& lNums)
+void gatherNumbers(Process& process, Numbers& gNums, NumStruct& lNums)
 {
 	MPI_Gatherv(
 		lNums.numbers.data(), 
@@ -100,9 +133,9 @@ void gatherNumbers(Process& process, std::vector<float>& gNums, NumStruct& lNums
 	);
 }
 
-std::vector<float> prefixScan(Process& process, NumStruct& nums)
+Numbers prefixScan(Process& process, NumStruct& nums)
 {
-	std::vector<float> sums(nums.numbers.begin(), nums.numbers.end());
+	Numbers sums(nums.numbers.begin(), nums.numbers.end());
 	sums.reserve(1); // fix when num count < processor count
 
 	// 1st stage - set maxes on every core in parallel
@@ -180,36 +213,6 @@ void visibility(Process& process, Numbers& gNums)
 		if (process.isRoot())
 			std::cout << "Algorithm Time: " << time << " ms" << std::endl;
 	#endif
-}
-
-int main(int argc, char *argv[]) // TODO fix p < np
-{
-	Process process(argc, argv);
-
-	Numbers globalNumbers;
-	if (process.isRoot())
-	{
-		#if BENCHMARK
-			globalNumbers = generateNumbers(std::strtol(argv[1], nullptr, 10));
-		#else
-			globalNumbers = parseInput(argv[1]);
-		#endif
-		process.createOffsets(globalNumbers);
-	}
-
-	visibility(process, globalNumbers);
-
-	// print numbers
-	#if !BENCHMARK
-		if (process.isRoot())
-		{
-			for (size_t i = 0; i < globalNumbers.size() - 1; ++i)
-				std::cout << static_cast<char>(globalNumbers[i]) << ",";
-			std::cout << static_cast<char>(globalNumbers.back()) << std::endl;
-		}
-	#endif
-
-	return EXIT_SUCCESS;
 }
 
 ////////////////////////////////////////////////

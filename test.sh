@@ -1,8 +1,7 @@
 #!/bin/bash
 
-# flags="-oFast -funroll-loops -frename-registers -fno-exceptions -fomit-frame-pointer -fdelete-null-pointer-checks"
 flags="-O2 -std=c++17"
-defs="-D BENCHMARK=1"
+defs="-D BENCHMARK=0"
 
 if [ $# -ne 1 ]; then 
     echo "Invalid arguments. Expected comma-separated points."

@@ -13,8 +13,7 @@
 
 using Numbers = std::vector<float>;
 
-class Process;
-
+// Struct of numbers for given processor
 struct NumStruct
 {
     float originAltitude;
@@ -25,16 +24,12 @@ struct NumStruct
     void toAngles();
 };
 
+// Offsets for scattering and gathering misaligned numbers
 struct Offsets
 {
     std::vector<int> counts;
     std::vector<int> displacements;
 };
-
-
-Numbers parseInput(std::string_view input);
-NumStruct scatterNumbers(Process& process, Numbers& gNumbers);
-void visibility(Process& process, Numbers& gNums);
 
 // Helper class for current MPI process
 class Process
@@ -58,3 +53,21 @@ private:
     int mRank;
     int mWorldSize;
 };
+
+// Parse given input
+Numbers parseInput(std::string_view input);
+
+// Generates given count of numbers
+Numbers generateNumbers(size_t count);
+
+// Scatters numbers across processes
+NumStruct scatterNumbers(Process& process, Numbers& gNumbers);
+
+// Gathers numbers from processes
+void gatherNumbers(Process& process, Numbers& gNums, NumStruct& lNums);
+
+// Performs prefix max scan on given numbers
+Numbers prefixScan(Process& process, NumStruct& nums);
+
+// Performs visibility algorithm
+void visibility(Process& process, Numbers& gNums);
