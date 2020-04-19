@@ -18,6 +18,7 @@ struct NumStruct
 {
     float originAltitude;
     uint32_t globalOffset;
+    uint32_t globalCount;
     Numbers numbers;
 
     // Converts altitudes to angles 
@@ -47,6 +48,7 @@ public:
     int& worldSize();
     bool isRoot();
     Offsets& getOffests();
+    void setWorldSize(int size);
 
 private:
     Offsets mOffsets;

@@ -85,6 +85,7 @@ NumStruct scatterNumbers(Process& process, Numbers& numbers)
 	// broadcast how many numbers is incoming
 	int count = numbers.size() - 1;
 	MPI_Bcast(&count, 1, MPI_INT, Process::ROOT, MPI_COMM_WORLD);
+	result.globalCount = count;
 
 	auto getCount = [&count, &process](int rank) {
 		return count / process.worldSize() + (rank < count % process.worldSize());
@@ -137,66 +138,126 @@ Numbers prefixScan(Process& process, NumStruct& nums)
 {
 	Numbers sums(nums.numbers.begin(), nums.numbers.end());
 	sums.reserve(1); // fix when num count < processor count
-
-	// if (process.isRoot())
-	// 	for (auto& e : sums)
-	// 		std::cout << "\t" << "RANK: " << process.rank() << "  " << e << std::endl;
-
-	// 1st stage - set maxes on every core in parallel
+	size_t maxStride = 0;
+	
+	// 1st stage - up-sweep locally 
 	{
 		size_t start = 0;
 	
-		for (size_t stride = 1; stride <= std::ceil(sums.size() / 2); stride <<= 1)
+		for (size_t stride = 1; stride < sums.size(); stride <<= 1)
 		{
-			size_t prevPos = start;
-			for (size_t i = start; i + stride < sums.size(); prevPos = i + stride, i += 2 * stride)
-				sums[i + stride] = std::max(sums[i], sums[i + stride]);
-
-
-			// if (process.isRoot())
-			// 	std::cout << "pos : " << prevPos << "stride " << stride << std::endl;
-
+			size_t next = start;
+			for (; next + stride < sums.size(); next += 2 * stride)
+				sums[next + stride] = std::max(sums[next], sums[next + stride]);
 
 			// unaligned data (tree) correction
-			if (prevPos + 2 * stride >= sums.size())
-				sums.back() = std::max(sums[prevPos], sums.back());
+			if (next + 1 < sums.size())
+				sums.back() = std::max(sums[next], sums.back());
 
 			start += stride;
+			maxStride = stride;
 		}
-
-		// std::cout << "RANK: " << process.rank() << " local_max: " << sums.back() << std::endl;
-		// for (auto& e : sums)
-		// 	std::cout << "\t" << "RANK: " << process.rank() << "  " << e << std::endl;
 	}
 
-	float gMax = -std::numeric_limits<float>::max();
-
-	// 2nd stage - maxes from cores to consecutive ranks
+	auto upsweepMax = [&process, &sums](size_t sendId, size_t recvId)
 	{
-		if (process.isRoot())
-			MPI_Send(&sums.back(), 1, MPI_FLOAT, process.rank() + 1, 42, MPI_COMM_WORLD);
-		else
+		int tag = sendId | (recvId << 8);
+		float recv;
+
+		if (process.rank() == sendId)
+			MPI_Send(&sums.back(), 1, MPI_FLOAT, recvId, tag, MPI_COMM_WORLD);
+		
+		if (process.rank() == recvId)
 		{
-			MPI_Recv(&gMax, 1, MPI_FLOAT, process.rank() - 1, 42, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-			
-			if (process.rank() != process.worldSize() - 1)
-			{
-				float max = std::max(sums.back(), gMax);
-				MPI_Send(&max, 1, MPI_FLOAT, process.rank() + 1, 42, MPI_COMM_WORLD);
+			MPI_Recv(&recv, 1, MPI_FLOAT, sendId, tag, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+			sums.back() = std::max(sums.back(), recv);
+		}
+	};
+
+	// 2nd stage - parallel up-sweep and down-sweep
+	{
+		// up-sweep
+		size_t start = 0;
+		size_t maxGlobStride = 1;
+
+		for (size_t stride = 1; stride < process.worldSize(); stride <<= 1)
+		{
+			size_t next = start;
+			for (; next + stride < process.worldSize(); next += 2 * stride)
+				upsweepMax(next, next + stride);
+
+			// unaligned data (tree) correction
+			if (next + 1 < process.worldSize())
+				upsweepMax(next, process.worldSize() - 1);
+
+			start += stride;
+			maxGlobStride = stride;
+		}
+
+		auto downsweepMax = [&process, &sums](size_t sendId, size_t recvId)
+		{
+			if (process.rank() == sendId || process.rank() == recvId)
+			{	
+				int sendtag = sendId | (recvId << 8);
+				float recv;
+
+				if (process.rank() != sendId)
+					std::swap(sendId, recvId);
+				
+				MPI_Sendrecv(
+					&sums.back(), 1, MPI_FLOAT, recvId, sendtag, 
+					&recv, 1, MPI_FLOAT, recvId, sendtag, 
+					MPI_COMM_WORLD, MPI_STATUS_IGNORE
+				);
+
+				if (process.rank() < std::max(sendId, recvId)) // left child
+					sums.back() = recv;
+				else // right child
+					sums.back() = std::max(sums.back(), recv);
 			}
+		};
+
+		//down-sweep
+		if (process.rank() == process.worldSize() - 1)
+			sums.back() = -std::numeric_limits<float>::max();
+
+		for (size_t stride = maxGlobStride; stride > 0; stride >>= 1)
+		{
+			size_t start = stride - 1;
+			size_t next = start;
+
+			for (; next + stride < process.worldSize(); next += 2 * stride);			
+
+			// unaligned data (tree) correction
+			if (next + 1 < process.worldSize())
+				downsweepMax(next, process.worldSize() - 1);
+
+			for (size_t i = start; i + stride < process.worldSize(); i += 2 * stride)
+				downsweepMax(i, i + stride);
 		}
 	}
 
-	// std::cout << "RANK: " << process.rank() << " global_max: " << gMax << std::endl;
-
-
-	// 3rd stage - finish scan on every core in parallel (make prefix, from partial infix)
+	// 3rd stage - down-sweep locally on every core in parallel
 	{
-		for (auto &e : sums)
+		for (size_t stride = maxStride; stride > 0; stride >>= 1)
 		{
-			std::swap(gMax, e);
-			gMax = std::max(gMax, e);
-			// std::cout << "\t RANK: " << process.rank() << "  " << e << std::endl;
+			size_t start = stride - 1;
+			size_t next = start;
+
+			for (; next + stride < sums.size(); next += 2 * stride);
+
+			// unaligned data (tree) correction
+			if (next + 1 < sums.size())
+			{
+				std::swap(sums[next], sums.back());
+				sums.back() = std::max(sums[next], sums.back());
+			}
+
+			for (size_t i = start; i + stride < sums.size(); i += 2 * stride)
+			{	
+				std::swap(sums[i], sums[i + stride]);
+				sums[i + stride] = std::max(sums[i], sums[i + stride]);
+			}
 		}
 	}
 
@@ -210,6 +271,17 @@ void visibility(Process& process, Numbers& gNums)
 	#endif
 
 	auto numStruct = scatterNumbers(process, gNums);
+
+	if (numStruct.globalCount == 0)
+	{
+		if (process.isRoot())
+			gNums.front() = '_';
+		return;
+	}
+
+	auto prevWorldSize = process.worldSize();
+	if (process.worldSize() > numStruct.globalCount)
+		process.setWorldSize(numStruct.globalCount);
 
 	#if BENCHMARK
 		auto scatterPoint = clk::now();
@@ -238,6 +310,7 @@ void visibility(Process& process, Numbers& gNums)
 			std::cout << "Algorithm time: " << algTime << " ms" <<  std::endl;
 	#endif
 		
+	process.setWorldSize(prevWorldSize);
 	gatherNumbers(process, gNums, numStruct);
 
 	#if BENCHMARK
@@ -310,4 +383,9 @@ bool Process::isRoot()
 Offsets& Process::getOffests()
 {
 	return mOffsets;
+}
+
+void Process::setWorldSize(int size)
+{
+	mWorldSize = size;
 }
