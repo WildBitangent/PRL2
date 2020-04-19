@@ -59,7 +59,7 @@ Numbers parseInput(std::string_view input)
 	do
 	{
 		pos = input.find(",", prev);
-		numbers.emplace_back(std::strtof(input.begin() + prev, nullptr)); // TODO maybe handle errno
+		numbers.emplace_back(std::strtof(input.begin() + prev, nullptr));
 		prev = pos + 1;
 	} while (pos != std::string::npos);
 
@@ -138,21 +138,35 @@ Numbers prefixScan(Process& process, NumStruct& nums)
 	Numbers sums(nums.numbers.begin(), nums.numbers.end());
 	sums.reserve(1); // fix when num count < processor count
 
+	// if (process.isRoot())
+	// 	for (auto& e : sums)
+	// 		std::cout << "\t" << "RANK: " << process.rank() << "  " << e << std::endl;
+
 	// 1st stage - set maxes on every core in parallel
 	{
 		size_t start = 0;
-		for (size_t stride = 1; stride < std::ceil(std::log2(sums.size())); stride <<= 1)
+	
+		for (size_t stride = 1; stride <= std::ceil(sums.size() / 2); stride <<= 1)
 		{
 			size_t prevPos = start;
-			for (size_t i = start; i + stride < sums.size(); prevPos = i, i += 2 * stride)
+			for (size_t i = start; i + stride < sums.size(); prevPos = i + stride, i += 2 * stride)
 				sums[i + stride] = std::max(sums[i], sums[i + stride]);
 
+
+			// if (process.isRoot())
+			// 	std::cout << "pos : " << prevPos << "stride " << stride << std::endl;
+
+
 			// unaligned data (tree) correction
-			if (prevPos + stride >= sums.size())
+			if (prevPos + 2 * stride >= sums.size())
 				sums.back() = std::max(sums[prevPos], sums.back());
 
 			start += stride;
 		}
+
+		// std::cout << "RANK: " << process.rank() << " local_max: " << sums.back() << std::endl;
+		// for (auto& e : sums)
+		// 	std::cout << "\t" << "RANK: " << process.rank() << "  " << e << std::endl;
 	}
 
 	float gMax = -std::numeric_limits<float>::max();
@@ -173,12 +187,16 @@ Numbers prefixScan(Process& process, NumStruct& nums)
 		}
 	}
 
+	// std::cout << "RANK: " << process.rank() << " global_max: " << gMax << std::endl;
+
+
 	// 3rd stage - finish scan on every core in parallel (make prefix, from partial infix)
 	{
 		for (auto &e : sums)
 		{
 			std::swap(gMax, e);
 			gMax = std::max(gMax, e);
+			// std::cout << "\t RANK: " << process.rank() << "  " << e << std::endl;
 		}
 	}
 
@@ -193,6 +211,13 @@ void visibility(Process& process, Numbers& gNums)
 
 	auto numStruct = scatterNumbers(process, gNums);
 
+	#if BENCHMARK
+		auto scatterPoint = clk::now();
+		auto scatterTime = duration_cast<std::chrono::duration<float, std::milli>>(scatterPoint - start).count();
+		if (process.isRoot())
+			std::cout << "Scatter time: " << scatterTime << " ms" <<  std::endl;
+	#endif
+
 	// parallel to angles
 	numStruct.toAngles();
 
@@ -205,13 +230,26 @@ void visibility(Process& process, Numbers& gNums)
 
 	if (process.isRoot())
 		gNums.front() = '_';
+
+	#if BENCHMARK
+		auto algPoint = clk::now();
+		auto algTime = duration_cast<std::chrono::duration<float, std::milli>>(algPoint - scatterPoint).count();
+		if (process.isRoot())
+			std::cout << "Algorithm time: " << algTime << " ms" <<  std::endl;
+	#endif
 		
 	gatherNumbers(process, gNums, numStruct);
 
 	#if BENCHMARK
-		auto time = duration_cast<std::chrono::duration<float, std::milli>>(clk::now() - start).count();
+		auto gatherPoint = clk::now();
+		auto gatherTime = duration_cast<std::chrono::duration<float, std::milli>>(gatherPoint - algPoint).count();
+		auto time = duration_cast<std::chrono::duration<float, std::milli>>(gatherPoint - start).count();
+		
 		if (process.isRoot())
-			std::cout << "Algorithm Time: " << time << " ms" << std::endl;
+		{
+			std::cout << "Gather Time: " << gatherTime << " ms" << std::endl;
+			std::cout << "Total Time: " << time << " ms" << std::endl;
+		}
 	#endif
 }
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 flags="-O2 -std=c++17"
-defs="-D BENCHMARK=0"
+defs="-D BENCHMARK=1"
 
 if [ $# -ne 1 ]; then 
     echo "Invalid arguments. Expected comma-separated points."
@@ -14,4 +14,4 @@ mpic++ --prefix /usr/local/share/OpenMPI $flags $defs -o vid vid.cpp
 mpirun --prefix /usr/local/share/OpenMPI vid $1
 
 # clean
-rm -f vid
+# rm -f vid
